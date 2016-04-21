@@ -1,0 +1,76 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Editing Order</h1>
+
+    <p class="pull-right"><a class="btn btn-danger" href="{{ path('order_remove', {id: order.id}) }}">Remove Order</a></p>
+
+    {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    <div class="container">
+
+        {{ form_start(form, { 'attr': {'class': 'form-inline'} }) }}
+
+        <div class="row">
+
+            <div class="form-group">
+
+                    {{ form_widget(form.sku, {'attr': {'placeholder': 'SKU'} }) }}
+
+            </div>
+
+            <div class="form-group">
+
+                    {{ form_widget(form.quantity, {'attr': {'style': 'width:7em'} }) }}
+
+            </div>
+
+            <div class="form-group">
+
+                {{ form_widget(form.add) }}
+
+            </div>
+
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
+        
+        <br>
+
+    <form action="{{ path('order_update_quantities', {id: order.id}) }}" method="post">
+
+        <table class="table">
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Vendor</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for item in order.items %}
+                <tr>
+                    <td>{{ item.sku }}</td>
+                    <td>{{ item.name }}</td>
+                    <td><input class="form-control" type="text" name="quantity[{{ item.id }}]" value="{{ item.quantity }}" style="width:7em"></td>
+                    <td>{{ item.vendor }}</td>
+                    <td><a class="btn btn-xs btn-danger" href="{{ path('order_remove_item', {id: item.id}) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <p><button class="btn btn-default" type="submit">Update Quantities</button></p>
+
+    </form>
+
+    <p><a href="{{ path('order_index') }}">Back</a></p>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Vendor Orders</h1>
+
+    <table class="table">
+        <tr>
+            <th>Vendor</th>
+            <th>Line Count</th>
+            <th>Total Items</th>
+            <th>&nbsp;</th>
+        </tr>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.vendor }}</td>
+                <td>{{ order.lines }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>
+                    <a class="btn btn-xs btn-default" href="{{ path('vendor_view', {vendor: order.vendor}) }}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;View</a>
+                    <a class="btn btn-xs btn-default"  href="{{ path('vendor_export', {vendor: order.vendor}) }}"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Download</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="{{ path('order_index') }}">Back</a></p>
+
+{% endblock %}

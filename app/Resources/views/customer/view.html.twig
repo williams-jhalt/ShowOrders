@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Customer Order</h1>
+
+    <p>Order for <b>{{ customer }}</b></p>
+
+    <table class="table">
+        <tr>
+            <th>Vendor</th>
+            <th>Lines</th>
+            <th>&nbsp;</th>
+        </tr>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.vendor }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>
+                    <a class="btn btn-xs btn-default" href="{{ path('customer_detail', {customer: customer, vendor: order.vendor}) }}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;View</a>
+                    <a class="btn btn-xs btn-default"  href="{{ path('customer_export', {customer: customer, vendor: order.vendor}) }}"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Download</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="{{ path('customer_index') }}">Back</a></p>
+
+{% endblock %}

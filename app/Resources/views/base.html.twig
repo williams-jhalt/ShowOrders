@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="{{ asset('js/bootstrap.js') }}"></script>
+        {% endblock %}
+        
+        <style type="text/css">
+            #main-container {
+                margin-top: 75px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('homepage') }}">Show Orders</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('order_index') }}">Create Orders</a></li>
+                        <li><a href="{{ path('vendor_index') }}">Vendor Order Summary</a></li>
+                        <li><a href="{{ path('customer_index') }}">Customer Order Summary</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+
+        <div id="main-container" class="container">
+
+            {% block body %}{% endblock %}
+
+        </div>
+
+    </body>
+</html>
