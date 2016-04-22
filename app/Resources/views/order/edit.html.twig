@@ -5,6 +5,8 @@
 
     <h1>Editing Order</h1>
 
+    <p>Order for <b>{{ order.customerNumber }}</b></p>
+
     <p class="pull-right"><a class="btn btn-danger" href="{{ path('order_remove', {id: order.id}) }}">Remove Order</a></p>
 
     {% for flash_message in app.session.flashBag.get('notice') %}
