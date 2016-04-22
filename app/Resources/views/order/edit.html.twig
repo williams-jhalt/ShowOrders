@@ -7,14 +7,20 @@
 
     <p>Order for <b>{{ order.customerNumber }}</b></p>
 
-    <p class="pull-right"><a class="btn btn-danger" href="{{ path('order_remove', {id: order.id}) }}">Remove Order</a></p>
+    <p class="pull-right">
+        <a class="btn btn-danger" href="{{ path('order_remove', {id: order.id}) }}">Remove Order</a>
+    </p>
 
-    {% for flash_message in app.session.flashBag.get('notice') %}
+    {% if app.session.flashBag.peek('notice') is not empty %}
         <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            {{ flash_message }}
+            <ul>
+                {% for flash_message in app.session.flashBag.get('notice') %}
+                    <li>{{ flash_message }}</li>
+                {% endfor %}
+            </ul>
         </div>
-    {% endfor %}
+    {% endif %}
 
     <div class="container">
 
@@ -24,19 +30,20 @@
 
             <div class="form-group">
 
-                    {{ form_widget(form.sku, {'attr': {'placeholder': 'SKU'} }) }}
+                {{ form_widget(form.sku, {'attr': {'placeholder': 'SKU'} }) }}
 
             </div>
 
             <div class="form-group">
 
-                    {{ form_widget(form.quantity, {'attr': {'style': 'width:7em'} }) }}
+                {{ form_widget(form.quantity, {'attr': {'style': 'width:7em'} }) }}
 
             </div>
 
             <div class="form-group">
 
-                {{ form_widget(form.add) }}
+                {{ form_widget(form.add) }}        
+                <a class="btn btn-default" href="{{ path('order_import', {id: order.id}) }}">Import from CSV</a>
 
             </div>
 
@@ -45,8 +52,8 @@
         {{ form_end(form) }}
 
     </div>
-        
-        <br>
+
+    <br>
 
     <form action="{{ path('order_update_quantities', {id: order.id}) }}" method="post">
 

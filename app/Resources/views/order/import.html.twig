@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Import from CSV</h1>
+
+    {% if app.session.flashBag.peek('notice') is not empty %}
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <ul>
+                {% for flash_message in app.session.flashBag.get('notice') %}
+                    <li>{{ flash_message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col-xs-4">
+
+            <p>CSV File must contain 2 columns. Column 1 should be the SKU, and column 2 should be the quantity.</p>
+
+            <form action="{{ path('order_import', {id: order.id}) }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" name="file" accept=".csv">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit">Import</button>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <p><a href="{{ path('order_index') }}">Back</a></p>
+
+{% endblock %}

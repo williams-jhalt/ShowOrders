@@ -8,7 +8,9 @@ use AppBundle\Form\ShowOrderItemType;
 use AppBundle\Form\ShowOrderType;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends Controller {
@@ -96,7 +98,7 @@ class OrderController extends Controller {
                     $em->persist($existingProduct);
                 } else {
                     $orderItem->setSku($product->item_item);
-                    $orderItem->setName($product->item_descr[0]);
+                    $orderItem->setName(implode(" ", $product->item_descr));
                     $orderItem->setVendor($product->item_vendor);
                     $em->persist($orderItem);
                 }
@@ -144,27 +146,84 @@ class OrderController extends Controller {
 
         return $this->redirectToRoute('order_index');
     }
-    
+
     /**
      * @Route("/orders/update_quantities/{id}", name="order_update_quantities")
      */
     public function updateQuantitiesAction($id, Request $request) {
-        
+
         $quantities = $request->get('quantity');
-        
+
         $repo = $this->getDoctrine()->getRepository('AppBundle:ShowOrderItem');
         $em = $this->getDoctrine()->getManager();
-        
+
         foreach ($quantities as $itemId => $quantity) {
             $orderItem = $repo->find($itemId);
             $orderItem->setQuantity($quantity);
             $em->persist($orderItem);
         }
-        
+
         $em->flush();
-        
+
         return $this->redirectToRoute('order_edit', array('id' => $id));
-        
+    }
+
+    /**
+     * @Route("/orders/import/{id}", name="order_import")
+     */
+    public function importAction($id, Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $order = $em->getRepository('AppBundle:ShowOrder')->find($id);
+
+        if ($request->isMethod(Request::METHOD_POST)) {
+
+            $file = $request->files->get('file');
+
+            $fh = $file->openFile("r");
+            $fh->setFlags(SplFileObject::SKIP_EMPTY | SplFileObject::DROP_NEW_LINE);
+
+            $goodfile = false;
+
+            if ($file->getClientOriginalExtension() == 'csv' || $file->getClientOriginalExtension() == 'txt') {
+
+                while (!$fh->eof()) {
+                    $row = $fh->fgetcsv();
+                    if (empty($row[0])) {
+                        continue;
+                    }
+                    $product = $this->get('erp_one_product_service')->getProduct($row[0]);
+                    if ($product !== null) {
+                        $quantity = $row[1];
+                        $item = $this->getDoctrine()->getRepository('AppBundle:ShowOrderItem')->findOneBy(array('showOrder' => $order, 'sku' => $product->item_item));
+                        if ($item === null) {
+                            $item = new ShowOrderItem();
+                            $item->setSku($product->item_item);
+                            $item->setName(implode(" ", $product->item_descr));
+                            $item->setVendor($product->item_vendor);
+                            $item->setShowOrder($order);
+                        }
+                        $item->setQuantity($quantity);
+                        $em->persist($item);
+                        $goodfile = true;
+                    } else {
+                        $this->addFlash("notice", "Could not find SKU {$row[0]}");
+                    }
+                }
+
+                $em->flush();
+            }
+
+            if ($goodfile == false) {
+                $this->addFlash("notice", "File was not in expected format");
+            } else {
+                return $this->redirectToRoute('order_edit', array('id' => $id));
+            }
+        }
+
+        return $this->render('order/import.html.twig', array(
+                    'order' => $order
+        ));
     }
 
 }
