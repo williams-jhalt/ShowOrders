@@ -17,9 +17,9 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
-    erp_username: webserver
-    erp_password: Webserver1Password
+    erp_username: ~
+    erp_password: ~
     erp_server: 'http://wt-distone01:8080'
-    erp_company: WTC
+    erp_company: D1
     erp_appname: ShowOrders
 
