@@ -192,7 +192,7 @@ class OrderController extends Controller {
                     if (empty($row[0])) {
                         continue;
                     }
-                    $product = $this->get('erp_one_product_service')->getProduct($row[0]);
+                    $product = $this->get('erp_one_product_service')->getProduct(trim($row[0]));
                     if ($product !== null) {
                         $quantity = $row[1];
                         $item = $this->getDoctrine()->getRepository('AppBundle:ShowOrderItem')->findOneBy(array('showOrder' => $order, 'sku' => $product->item_item));
