@@ -31,7 +31,7 @@ class ErpOneProductService {
 
         $fields = "item.item,item.manufacturer,item.product_line,item.descr,item.date_added,wa_item.qty_oh,wa_item.list_price,item.upc1,item.sy_lookup,item.vendor";
         $query = "FOR EACH item NO-LOCK WHERE "
-                . "item.company_it = '{$this->_erp->getCompany()}' AND item.web_item = yes AND item.item = '{$sku}', "
+                . "item.company_it = '{$this->_erp->getCompany()}' AND item.item = '{$sku}', "
                 . "EACH wa_item NO-LOCK WHERE "
                 . "wa_item.company_it = item.company_it AND wa_item.item = item.item";
 
