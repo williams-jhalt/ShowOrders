@@ -1,0 +1,22 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Editing Show</h1>
+
+    <p class="pull-right">
+        <a class="btn btn-danger" href="{{ path('show_remove', {id: show.id}) }}">Remove Show</a>
+    </p>
+
+    <div class="row">
+
+        <div class="col-xs-4">
+            {{ form(form) }}
+        </div>
+
+    </div>
+
+    <p><a href="{{ path('show_index') }}">Back</a></p>
+
+{% endblock %}

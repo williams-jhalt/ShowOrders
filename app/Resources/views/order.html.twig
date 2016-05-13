@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block sidebar %}
+
+    <ul class="nav nav-pills nav-stacked">
+
+        <li><a href="{{ path('order_index') }}">Manage Orders</a></li>
+        <li><a href="{{ path('vendor_index') }}">Vendor Order Summary</a></li>
+        <li><a href="{{ path('customer_index') }}">Customer Order Summary</a></li>
+
+    </ul>
+
+{% endblock %}

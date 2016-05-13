@@ -46,6 +46,14 @@ class ShowOrder {
 
     /**
      *
+     * @var ShowOrder
+     * 
+     * @ORM\ManyToOne(targetEntity="Show", inversedBy="orders")
+     */
+    private $show;
+
+    /**
+     *
      * @var ArrayCollection
      * 
      * @ORM\OneToMany(targetEntity="ShowOrderItem", mappedBy="showOrder", cascade={"remove"})
@@ -136,5 +144,16 @@ class ShowOrder {
         $this->items = $items;
         return $this;
     }
+    
+    public function getShow() {
+        return $this->show;
+    }
+
+    public function setShow(Show $show) {
+        $this->show = $show;
+        return $this;
+    }
+
+
 
 }

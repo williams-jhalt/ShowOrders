@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    
+    <h1>Shows</h1>
+        
+    <p><a class="btn btn-primary" href="{{ path('show_new') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create New Show</a></p>
+    
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Edit</th>
+        </tr>
+        {% for show in shows %}
+            <tr>
+                <td><a href="{{ path('order_index', {showId: show.id}) }}">{{ show.name }}</a></td>
+                <td>{{ show.createdOn|date('m/d/Y h:i:s a') }}</td>
+                <td><a class="btn btn-xs btn-default" href="{{ path('show_edit', {id: show.id}) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+{% endblock %}

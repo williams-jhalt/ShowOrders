@@ -1,0 +1,18 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Create New Show</h1>
+
+    <div class="row">
+
+        <div class="col-xs-4">
+            {{ form(form) }}
+        </div>
+
+    </div>
+
+    <p><a href="{{ path('show_index') }}">Back</a></p>
+
+{% endblock %}

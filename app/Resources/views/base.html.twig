@@ -33,9 +33,7 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ path('order_index') }}">Create Orders</a></li>
-                        <li><a href="{{ path('vendor_index') }}">Vendor Order Summary</a></li>
-                        <li><a href="{{ path('customer_index') }}">Customer Order Summary</a></li>
+                        <li><a href="{{ path('show_index') }}">Manage Shows</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -43,7 +41,21 @@
 
         <div id="main-container" class="container">
 
-            {% block body %}{% endblock %}
+            <div class="row">
+
+                <div class="col-sm-3">
+
+                    {% block sidebar %}{% endblock %}
+
+                </div>
+
+                <div class="col-sm-9">
+
+                    {% block body %}{% endblock %}
+
+                </div>
+
+            </div>
 
         </div>
 

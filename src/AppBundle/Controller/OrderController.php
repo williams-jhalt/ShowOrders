@@ -12,15 +12,26 @@ use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class OrderController extends Controller {
 
     /**
      * @Route("/orders", name="order_index")
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {
+        
+        $session = new Session();
 
-        $orders = $this->getDoctrine()->getRepository('AppBundle:ShowOrder')->findAll();
+        $showId = $request->get('showId', $session->get('showId'));
+
+        if ($showId !== null) {
+            $session->set('showId', $showId);
+        }
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
+
+        $orders = $this->getDoctrine()->getRepository('AppBundle:ShowOrder')->findByShow($show);
 
         return $this->render('order/index.html.twig', array(
                     'orders' => $orders
@@ -32,7 +43,13 @@ class OrderController extends Controller {
      */
     public function newAction(Request $request) {
 
+        $session = new Session();
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
+
         $order = new ShowOrder();
+        $order->setShow($show);
         $order->setCreatedOn(new DateTime("now"));
         $order->setUpdatedOn(new DateTime("now"));
 

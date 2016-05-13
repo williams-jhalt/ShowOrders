@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class VendorController extends Controller {
 
@@ -13,8 +14,19 @@ class VendorController extends Controller {
      * @Route("/vendors", name="vendor_index")
      */
     public function indexAction() {
+                
+        $session = new Session();
 
-        $query = $this->getDoctrine()->getManager()->createQuery("SELECT o.vendor as vendor, SUM(o.quantity) as quantity, COUNT(o) as lines FROM AppBundle:ShowOrderItem o GROUP BY o.vendor");
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
+
+        $query = $this->getDoctrine()->getManager()->createQuery(
+                "SELECT o.vendor as vendor, SUM(o.quantity) as quantity, COUNT(o) as lines "
+                . "FROM AppBundle:ShowOrderItem o "
+                . "JOIN o.showOrder r "
+                . "WHERE r.show = :show "
+                . "GROUP BY o.vendor")->setParameter('show', $show);
         $orders = $query->getResult();
 
         return $this->render('vendor/index.html.twig', array(
@@ -26,14 +38,21 @@ class VendorController extends Controller {
      * @Route("/vendors/view/{vendor}", name="vendor_view")
      */
     public function viewAction($vendor) {
+                
+        $session = new Session();
+
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
 
         $query = $this->getDoctrine()
                 ->getManager()
                 ->createQuery(
                 "SELECT i.sku as sku, i.name as name, SUM(i.quantity) as quantity, COUNT(i) as lines "
                 . "FROM AppBundle:ShowOrderItem i "
-                . "WHERE i.vendor = :vendor "
-                . "GROUP BY i.sku, i.name");
+                . "JOIN o.showOrder r "
+                . "WHERE r.show = :show AND i.vendor = :vendor "
+                . "GROUP BY i.sku, i.name")->setParameter('show', $show);
 
         $query->setParameter('vendor', $vendor);
 
@@ -49,14 +68,21 @@ class VendorController extends Controller {
      * @Route("/vendors/export/{vendor}", name="vendor_export")
      */
     public function exportAction($vendor) {
+                
+        $session = new Session();
+
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
 
         $query = $this->getDoctrine()
                 ->getManager()
                 ->createQuery(
                 "SELECT i.sku as sku, i.name as name, SUM(i.quantity) as quantity, COUNT(i) as lines "
                 . "FROM AppBundle:ShowOrderItem i "
-                . "WHERE i.vendor = :vendor "
-                . "GROUP BY i.sku, i.name");
+                . "JOIN o.showOrder r "
+                . "WHERE r.show = :show AND i.vendor = :vendor "
+                . "GROUP BY i.sku, i.name")->setParameter('show', $show);
 
         $query->setParameter('vendor', $vendor);
 

@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class CustomerController extends Controller {
 
@@ -13,8 +14,18 @@ class CustomerController extends Controller {
      * @Route("/customers", name="customer_index")
      */
     public function indexAction() {
+                
+        $session = new Session();
 
-        $query = $this->getDoctrine()->getManager()->createQuery("SELECT o.customerNumber as customer, COUNT(o) as quantity FROM AppBundle:ShowOrder o GROUP BY o.customerNumber");
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
+
+        $query = $this->getDoctrine()->getManager()->createQuery(
+                "SELECT o.customerNumber as customer, COUNT(o) as quantity "
+                . "FROM AppBundle:ShowOrder o "
+                . "WHERE o.show = :show "
+                . "GROUP BY o.customerNumber")->setParameter('show', $show);
         $orders = $query->getResult();
 
         return $this->render('customer/index.html.twig', array(
@@ -26,12 +37,25 @@ class CustomerController extends Controller {
      * @Route("/customers/view/{customer}", name="customer_view")
      */
     public function viewAction($customer) {
+                
+        $session = new Session();
+
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
         
         $query = $this->getDoctrine()
                 ->getManager()
-                ->createQuery("SELECT i.vendor, count(o) as quantity FROM AppBundle:ShowOrderItem i JOIN i.showOrder o WHERE o.customerNumber = :customerNumber GROUP BY i.vendor");
+                ->createQuery(
+                        "SELECT i.vendor, count(o) as quantity "
+                        . "FROM AppBundle:ShowOrderItem i "
+                        . "JOIN i.showOrder o "
+                        . "WHERE o.show = :show "
+                        . "AND o.customerNumber = :customerNumber "
+                        . "GROUP BY i.vendor");
         
         $query->setParameter('customerNumber', $customer);
+        $query->setParameter('show', $show);
         
         $orders = $query->getResult();
 
@@ -45,14 +69,26 @@ class CustomerController extends Controller {
      * @Route("/customers/detail/{customer}/{vendor}", name="customer_detail")
      */
     public function detailAction($customer, $vendor) {
+                
+        $session = new Session();
+
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
         
         $query = $this->getDoctrine()
                 ->getManager()
-                ->createQuery("SELECT i FROM AppBundle:ShowOrderItem i JOIN i.showOrder o WHERE o.customerNumber = :customerNumber AND i.vendor = :vendor");
+                ->createQuery(
+                        "SELECT i FROM AppBundle:ShowOrderItem i "
+                        . "JOIN i.showOrder o "
+                        . "WHERE o.show = :show "
+                        . "AND o.customerNumber = :customerNumber "
+                        . "AND i.vendor = :vendor");
         
         $query->setParameters(array(
             'customerNumber' => $customer,
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'show' => $show
         ));
         
         $items = $query->getResult();
@@ -69,14 +105,26 @@ class CustomerController extends Controller {
      * @Route("/customers/export/{customer}/{vendor}", name="customer_export")
      */
     public function exportAction($customer, $vendor) {
+                
+        $session = new Session();
+
+        $showId = $session->get('showId');
+
+        $show = $this->getDoctrine()->getRepository('AppBundle:Show')->find($showId);
         
         $query = $this->getDoctrine()
                 ->getManager()
-                ->createQuery("SELECT i FROM AppBundle:ShowOrderItem i JOIN i.showOrder o WHERE o.customerNumber = :customerNumber AND i.vendor = :vendor");
+                ->createQuery(
+                        "SELECT i FROM AppBundle:ShowOrderItem i "
+                        . "JOIN i.showOrder o "
+                        . "WHERE o.show = :show "
+                        . "AND o.customerNumber = :customerNumber "
+                        . "AND i.vendor = :vendor");
         
         $query->setParameters(array(
             'customerNumber' => $customer,
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'show' => $show
         ));
         
         $items = $query->getResult();
