@@ -50,7 +50,7 @@ class VendorController extends Controller {
                 ->createQuery(
                 "SELECT i.sku as sku, i.name as name, SUM(i.quantity) as quantity, COUNT(i) as lines "
                 . "FROM AppBundle:ShowOrderItem i "
-                . "JOIN o.showOrder r "
+                . "JOIN i.showOrder r "
                 . "WHERE r.show = :show AND i.vendor = :vendor "
                 . "GROUP BY i.sku, i.name")->setParameter('show', $show);
 
@@ -80,7 +80,7 @@ class VendorController extends Controller {
                 ->createQuery(
                 "SELECT i.sku as sku, i.name as name, SUM(i.quantity) as quantity, COUNT(i) as lines "
                 . "FROM AppBundle:ShowOrderItem i "
-                . "JOIN o.showOrder r "
+                . "JOIN i.showOrder r "
                 . "WHERE r.show = :show AND i.vendor = :vendor "
                 . "GROUP BY i.sku, i.name")->setParameter('show', $show);
 
