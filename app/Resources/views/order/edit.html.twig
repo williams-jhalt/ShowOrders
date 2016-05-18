@@ -1,6 +1,15 @@
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
 {% extends 'order.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#itemTable').DataTable();
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 
     <h1>Editing Order</h1>
@@ -17,7 +26,7 @@
             <ul>
                 {% for flash_message in app.session.flashBag.get('notice') %}
                     <li>{{ flash_message }}</li>
-                {% endfor %}
+                    {% endfor %}
             </ul>
         </div>
     {% endif %}
@@ -57,23 +66,27 @@
 
     <form action="{{ path('order_update_quantities', {id: order.id}) }}" method="post">
 
-        <table class="table">
-            <tr>
-                <th>SKU</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Vendor</th>
-                <th>&nbsp;</th>
-            </tr>
-            {% for item in order.items %}
+        <table id="itemTable" class="table">
+            <thead>
                 <tr>
-                    <td>{{ item.sku }}</td>
-                    <td>{{ item.name }}</td>
-                    <td><input class="form-control" type="text" name="quantity[{{ item.id }}]" value="{{ item.quantity }}" style="width:7em"></td>
-                    <td>{{ item.vendor }}</td>
-                    <td><a class="btn btn-xs btn-danger" href="{{ path('order_remove_item', {id: item.id}) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                    <th>SKU</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Vendor</th>
+                    <th>&nbsp;</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for item in order.items %}
+                    <tr>
+                        <td>{{ item.sku }}</td>
+                        <td>{{ item.name }}</td>
+                        <td><input class="form-control" type="text" name="quantity[{{ item.id }}]" value="{{ item.quantity }}" style="width:7em"></td>
+                        <td>{{ item.vendor }}</td>
+                        <td><a class="btn btn-xs btn-danger" href="{{ path('order_remove_item', {id: item.id}) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
 
         <p><button class="btn btn-default" type="submit">Update Quantities</button></p>

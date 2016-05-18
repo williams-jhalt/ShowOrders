@@ -6,10 +6,13 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/datatables.css') }}">
         {% endblock %}
 
         {% block javascripts %}
+            <script src="{{ asset('js/jquery.js') }}"></script>
             <script src="{{ asset('js/bootstrap.js') }}"></script>
+            <script src="{{ asset('js/datatables.js') }}"></script>
         {% endblock %}
         
         <style type="text/css">

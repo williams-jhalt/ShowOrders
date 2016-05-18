@@ -1,5 +1,14 @@
 {% extends 'order.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#itemTable').DataTable();
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 
     <h1>Customer Order</h1>
@@ -8,19 +17,23 @@
 
     <p><a class="btn btn-default"  href="{{ path('customer_export', {customer: customer, vendor: vendor}) }}"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Download as CSV</a></p>
 
-    <table class="table">
-        <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Quantity</th>
-        </tr>
-        {% for item in items %}
+    <table class="itemTable" class="table">
+        <thead>
             <tr>
-                <td>{{ item.sku }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.quantity }}</td>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Quantity</th>
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.sku }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
     <p><a href="{{ path('customer_view', {customer: customer}) }}">Back</a></p>
