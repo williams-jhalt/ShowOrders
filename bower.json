@@ -1,0 +1,13 @@
+{
+    "name": "ShowOrders",
+    "authors": [
+        "Beelab <info@bee-lab.net>",
+        "john <johnh@williams-trading.com>"
+    ],
+    "private": true,
+    "dependencies": {
+        "bootstrap": "*",
+        "datatables-bootstrap": "*",
+        "quagga": "*"
+    }
+}

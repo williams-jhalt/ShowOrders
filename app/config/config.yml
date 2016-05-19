@@ -109,5 +109,9 @@ assetic:
                 - %kernel.root_dir%/../bower_components/datatables/media/js/jquery.dataTables.js
                 - %kernel.root_dir%/../bower_components/datatables/media/js/dataTables.bootstrap.js
             output: js/datatables.js
+        quagga:
+            inputs:
+                - %kernel.root_dir%/../bower_components/quagga/dist/quagga.js
+            output: js/quagga.js
                 
                 
