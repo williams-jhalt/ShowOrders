@@ -75,14 +75,12 @@ assetic:
         jquery:
             inputs:
                 - %kernel.root_dir%/../bower_components/jquery/dist/jquery.js
-            output: js/jquery.js
         bootstrap_css:
             inputs:
                 - %kernel.root_dir%/../bower_components/bootstrap/less/bootstrap.less
             filters:
                 - lessphp
                 - cssrewrite
-            output: css/bootstrap.css
         bootstrap_js:
             inputs:
                 - %kernel.root_dir%/../bower_components/bootstrap/js/transition.js
@@ -97,21 +95,17 @@ assetic:
                 - %kernel.root_dir%/../bower_components/bootstrap/js/scrollspy.js
                 - %kernel.root_dir%/../bower_components/bootstrap/js/tab.js
                 - %kernel.root_dir%/../bower_components/bootstrap/js/affix.js
-            output: js/bootstrap.js
         datatables_css:
             inputs:
                 - %kernel.root_dir%/../bower_components/datatables/media/css/dataTables.bootstrap.css
             filters:
                 - cssrewrite
-            output: css/datatables.css
         datatables_js:
             inputs:
                 - %kernel.root_dir%/../bower_components/datatables/media/js/jquery.dataTables.js
                 - %kernel.root_dir%/../bower_components/datatables/media/js/dataTables.bootstrap.js
-            output: js/datatables.js
         quagga:
             inputs:
                 - %kernel.root_dir%/../bower_components/quagga/dist/quagga.js
-            output: js/quagga.js
                 
                 
