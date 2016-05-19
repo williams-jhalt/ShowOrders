@@ -65,6 +65,12 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
     
+minifier:
+    filter:
+        name:
+            css: minifier_css
+            js: minifier_js
+    
 assetic:
     filters:
         lessphp:
@@ -75,12 +81,15 @@ assetic:
         jquery:
             inputs:
                 - %kernel.root_dir%/../bower_components/jquery/dist/jquery.js
+            filters:
+                - minifier_js
         bootstrap_css:
             inputs:
                 - %kernel.root_dir%/../bower_components/bootstrap/less/bootstrap.less
             filters:
                 - lessphp
                 - cssrewrite
+                - minifier_css
         bootstrap_js:
             inputs:
                 - %kernel.root_dir%/../bower_components/bootstrap/js/transition.js
@@ -100,12 +109,17 @@ assetic:
                 - %kernel.root_dir%/../bower_components/datatables/media/css/dataTables.bootstrap.css
             filters:
                 - cssrewrite
+                - minifier_css
         datatables_js:
             inputs:
                 - %kernel.root_dir%/../bower_components/datatables/media/js/jquery.dataTables.js
                 - %kernel.root_dir%/../bower_components/datatables/media/js/dataTables.bootstrap.js
+            filters:
+                - minifier_js
         quagga:
             inputs:
                 - %kernel.root_dir%/../bower_components/quagga/dist/quagga.js
+            filters:
+                - minifier_js
                 
                 
